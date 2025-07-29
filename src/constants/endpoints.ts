@@ -12,15 +12,10 @@ const GEMS = {
 
 export const Endpoints = Object.freeze({
   GET: {
-    GetUser: {
-      url: `${GEMS.User}/get`,
-      schema: GetUserSchemaParams,
-    },
+    [`${GEMS.User}/get` as const]: GetUserSchemaParams,
+    [`${GEMS.User}/ping` as const]: undefined,
   } as const,
   POST: {
-    SetUser: {
-      url: `${GEMS.User}/set`,
-      schema: SetUserSchemaBody,
-    },
+    [`${GEMS.User}/set` as const]: SetUserSchemaBody,
   } as const,
 } as const);

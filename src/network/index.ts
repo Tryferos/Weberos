@@ -3,25 +3,29 @@ import {EndpointType} from '@type/endpoint';
 import {Success, Error, Params} from '@type/global';
 import z from 'zod';
 
-type GET_API_PATHS = (typeof Endpoints.GET)[keyof typeof Endpoints.GET]['url'];
-type POST_API_PATHS =
-  (typeof Endpoints.POST)[keyof typeof Endpoints.POST]['url'];
+type GET_API_PATHS = keyof typeof Endpoints.GET;
+type POST_API_PATHS = keyof typeof Endpoints.POST;
 
 type ParamsProp = Params;
 
 type GetProps = {
-  path: GET_API_PATHS;
-  params?: z.infer<
-    (typeof Endpoints.GET)[keyof typeof Endpoints.GET]['schema']
-  >;
-};
+  [P in GET_API_PATHS]: {
+    path: P;
+  } & ((typeof Endpoints.GET)[P] extends undefined
+    ? {params?: ParamsProp}
+    : {
+        params: z.infer<(typeof Endpoints.GET)[P]>;
+      });
+}[GET_API_PATHS];
 
 type PostProps = {
-  path: POST_API_PATHS;
-  body?: z.infer<
-    (typeof Endpoints.POST)[keyof typeof Endpoints.POST]['schema']
-  >;
-} & Omit<GetProps, 'path'>;
+  [P in POST_API_PATHS]: {
+    path: P;
+    params?: Params;
+  } & ((typeof Endpoints.POST)[P] extends undefined
+    ? {body?: BodyType}
+    : {body: z.infer<(typeof Endpoints.POST)[P]>});
+}[POST_API_PATHS];
 
 type PostFormProps = {
   path: POST_API_PATHS;
@@ -40,8 +44,8 @@ const _retrieveSchema = (
     const endpoint = Endpoints[requestType] as EndpointType<
       ParamsProp | BodyType
     >[typeof requestType];
-    if (endpoint?.[key]?.url === path) {
-      return endpoint[key].schema;
+    if (endpoint) {
+      return endpoint[key];
     }
   }
 };
