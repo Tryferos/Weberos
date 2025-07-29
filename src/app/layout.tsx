@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${FontFamilies.Wotfard} ${FontFamilies.Inter} w-[100dvw] h-[100dvh] font-body antialiased`}>
+        className={`${FontFamilies.Wotfard} ${FontFamilies.Inter} ${FontFamilies.Cubano} w-[100dvw] h-[100dvh] font-body antialiased`}>
         <div className="bg-main-bg layout-gradient w-full h-full">
           {children}
         </div>

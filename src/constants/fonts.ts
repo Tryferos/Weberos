@@ -22,8 +22,16 @@ const wotfardSemibold = localFont({
   display: 'swap',
 });
 
+const cubano = localFont({
+  src: '../app/fonts/Cubano.ttf',
+  variable: '--font-fantasy',
+  weight: '700 800',
+  display: 'swap',
+});
+
 const FontFamilies = Object.freeze({
   Wotfard: [wotfardMedium.variable, wotfardSemibold.variable].join(' '),
+  Cubano: cubano.variable,
   Inter: inter.variable,
 });
 
