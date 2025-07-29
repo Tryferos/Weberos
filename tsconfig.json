@@ -27,6 +27,7 @@
       "@utils/*": ["./src/utils/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@public/*": ["./public/*"],
+      "@schemas/*": ["./src/schemas/*"],
       "@app/*": ["./src/app/*"]
     }
   },
