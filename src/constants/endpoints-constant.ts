@@ -1,6 +1,6 @@
 import {Environment} from './env';
 
-import {GetUserSchemaParams, SetUserSchemaBody} from '@schemas/user';
+import {GetUserSchemaParams, SetUserSchemaBody} from '@schemas/user-schema';
 export const API_URL = Environment.API_URL;
 
 /**

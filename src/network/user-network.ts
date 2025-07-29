@@ -1,8 +1,8 @@
 import Network from './index';
-import {GetUserSchemaType, SetUserSchemaType} from '@schemas/user';
+import {GetUserSchemaType, SetUserSchemaType} from '@schemas/user-schema';
 
 const getUser = async ({id}: GetUserSchemaType) => {
-  const response = await Network.get({
+  const response = await Network.get<{atha: string}>({
     path: '/user/get',
     params: {id},
   });
