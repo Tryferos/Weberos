@@ -1,26 +1,92 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /*** Colors ***/
+  /*** Theme Colors ***/
+  --color-success: oklch(0.723 0.219 149.579);
+  --color-success-light: oklch(95% 0.052 163.051);
+  --color-success-focus: oklch(62.7% 0.194 149.214);
+  --color-warning: oklch(75% 0.183 55.934);
+  --color-warning-light: oklch(83.7% 0.128 66.29);
+  --color-warning-focus: oklch(70.5% 0.213 47.604);
+  --color-alert: oklch(0.704 0.191 22.216);
+  --color-error: oklch(63.7% 0.237 25.331);
+  --color-error-focus: oklch(57.7% 0.245 27.325);
+
+  /*** Frequent Colors ***/
+  --color-blue: oklch(0.623 0.214 259.815);
+  --color-blue-light: oklch(0.685 0.169 237.323);
+  --color-blue-focus: oklch(0.546 0.245 262.881);
+  --color-gray: oklch(0.705 0.015 286.067);
+  --color-gray-light: oklch(0.869 0.005 56.366);
+  --color-gray-focus: oklch(0.446 0.03 256.802);
+  --color-gray-hover-light: oklch(96.7% 0.003 264.542);
+
+  /*** Main Colors ***/
+  --color-main-bg: oklch(27.9% 0.041 260.031);
+  --color-icon-hover: rgba(112, 93, 242, 0.125);
+
+  /*** Fonts ***/
+  --font-body: var(--font-inter), sans-serif;
+  --font-heading: var(--font-heading), sans-serif;
+  --font-heading-sb: var(--font-heading-sb), sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.layout-gradient {
+  background-image:
+    radial-gradient(
+      50% 50% at 50% -10%,
+      oklch(70.522% 0.07076 196.909 / 0.3) 0%,
+      transparent 20%
+    ),
+    radial-gradient(
+      50% 50% at 50% 0%,
+      oklch(70.522% 0.07076 196.909 / 0.25) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      50% 50% at 50% 0%,
+      oklch(70.522% 0.07076 196.909 / 0.2) 0%,
+      transparent 80%
+    );
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
-
+* {
+  margin: 0;
+}
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+}
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
 }
