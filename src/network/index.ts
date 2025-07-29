@@ -9,24 +9,24 @@ type POST_API_PATHS =
 
 type ParamsProp = Params;
 
-type GetProps<K extends KeyType = ParamsProp> = {
+type GetProps = {
   path: GET_API_PATHS;
   params?: z.infer<
     (typeof Endpoints.GET)[keyof typeof Endpoints.GET]['schema']
   >;
 };
 
-type PostProps<K extends KeyType = ParamsProp> = {
+type PostProps = {
   path: POST_API_PATHS;
   body?: z.infer<
     (typeof Endpoints.POST)[keyof typeof Endpoints.POST]['schema']
   >;
-} & Omit<GetProps<K>, 'path'>;
+} & Omit<GetProps, 'path'>;
 
-type PostFormProps<K extends KeyType = ParamsProp> = {
+type PostFormProps = {
   path: POST_API_PATHS;
   body?: FormData | null;
-} & Omit<GetProps<K>, 'path'>;
+} & Omit<GetProps, 'path'>;
 
 type BodyType = Record<string, unknown>;
 type KeyType = {[key: string]: string | number | boolean | null | undefined};
@@ -46,10 +46,10 @@ const _retrieveSchema = (
   }
 };
 
-const get = async <T = Success, K extends KeyType = ParamsProp>({
+const get = async <T = Success>({
   path,
   params,
-}: GetProps<K>): Promise<T | Error> => {
+}: GetProps): Promise<T | Error> => {
   try {
     const schema = _retrieveSchema(path, 'GET') as z.ZodSchema<typeof params>;
     const parsedParams = schema?.parse(params) ?? params;
@@ -82,11 +82,11 @@ const get = async <T = Success, K extends KeyType = ParamsProp>({
   }
 };
 
-const post = async <T = Success, K extends KeyType = ParamsProp>({
+const post = async <T = Success>({
   body,
   path,
   params,
-}: PostProps<K>): Promise<T | Error> => {
+}: PostProps): Promise<T | Error> => {
   try {
     const schema = _retrieveSchema(path, 'POST') as z.ZodSchema<typeof body>;
     const parsedBody = schema?.parse(body) ?? body;
@@ -120,11 +120,11 @@ const post = async <T = Success, K extends KeyType = ParamsProp>({
   }
 };
 
-const postFormData = async <T = Success, K extends KeyType = ParamsProp>({
+const postFormData = async <T = Success>({
   body,
   path,
   params,
-}: PostFormProps<K>): Promise<T | Error> => {
+}: PostFormProps): Promise<T | Error> => {
   try {
     const url = createUrl(path, params);
     const response = await fetch(url, {
