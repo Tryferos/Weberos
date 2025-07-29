@@ -11,12 +11,16 @@ type ParamsProp = Params;
 
 type GetProps<K extends KeyType = ParamsProp> = {
   path: GET_API_PATHS;
-  params?: K;
+  params?: z.infer<
+    (typeof Endpoints.GET)[keyof typeof Endpoints.GET]['schema']
+  >;
 };
 
 type PostProps<K extends KeyType = ParamsProp> = {
   path: POST_API_PATHS;
-  body?: BodyType | FormData | null;
+  body?: z.infer<
+    (typeof Endpoints.POST)[keyof typeof Endpoints.POST]['schema']
+  >;
 } & Omit<GetProps<K>, 'path'>;
 
 type PostFormProps<K extends KeyType = ParamsProp> = {
