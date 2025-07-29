@@ -1,8 +1,11 @@
 import {API_URL, Endpoints} from '@constants/endpoints';
+import {EndpointType} from '@type/endpoint';
 import {Success, Error, Params} from '@type/global';
+import z from 'zod';
 
-type GET_API_PATHS = (typeof Endpoints.GET)[keyof typeof Endpoints.GET];
-type POST_API_PATHS = (typeof Endpoints.POST)[keyof typeof Endpoints.POST];
+type GET_API_PATHS = (typeof Endpoints.GET)[keyof typeof Endpoints.GET]['url'];
+type POST_API_PATHS =
+  (typeof Endpoints.POST)[keyof typeof Endpoints.POST]['url'];
 
 type ParamsProp = Params;
 
@@ -24,12 +27,29 @@ type PostFormProps<K extends KeyType = ParamsProp> = {
 type BodyType = Record<string, unknown>;
 type KeyType = {[key: string]: string | number | boolean | null | undefined};
 
+const _retrieveSchema = (
+  path: GET_API_PATHS | POST_API_PATHS,
+  requestType: keyof typeof Endpoints,
+): z.ZodSchema<ParamsProp | BodyType> | undefined => {
+  const keys = Object.keys(Endpoints[requestType]);
+  for (const key of keys) {
+    const endpoint = Endpoints[requestType] as EndpointType<
+      ParamsProp | BodyType
+    >[typeof requestType];
+    if (endpoint?.[key]?.url === path) {
+      return endpoint[key].schema;
+    }
+  }
+};
+
 const get = async <T = Success, K extends KeyType = ParamsProp>({
   path,
   params,
 }: GetProps<K>): Promise<T | Error> => {
   try {
-    const url = createUrl(path, params);
+    const schema = _retrieveSchema(path, 'GET') as z.ZodSchema<typeof params>;
+    const parsedParams = schema?.parse(params) ?? params;
+    const url = createUrl(path, parsedParams);
     const response = await fetch(url, {
       method: 'GET',
       headers: await getHeaders(),
@@ -43,7 +63,12 @@ const get = async <T = Success, K extends KeyType = ParamsProp>({
       } as Error;
     }
   } catch (_error) {
-    console.log('catch');
+    if (_error instanceof z.ZodError) {
+      return {
+        message: _error.issues?.[0].message ?? 'Zod Schema Validation failed.',
+        code: 400,
+      };
+    }
     const error = _error as Error;
     const err: Error = {
       message: error?.message ?? error?.toString(),
@@ -59,11 +84,13 @@ const post = async <T = Success, K extends KeyType = ParamsProp>({
   params,
 }: PostProps<K>): Promise<T | Error> => {
   try {
+    const schema = _retrieveSchema(path, 'POST') as z.ZodSchema<typeof body>;
+    const parsedBody = schema?.parse(body) ?? body;
     const url = createUrl(path, params);
     const response = await fetch(url, {
       method: 'POST',
       headers: await getHeaders(),
-      body: body ? JSON.stringify(body) : undefined,
+      body: parsedBody ? JSON.stringify(parsedBody) : undefined,
     });
     if (response.status >= 200 && response.status < 300) {
       return handleResponse<T>(response);
@@ -74,6 +101,12 @@ const post = async <T = Success, K extends KeyType = ParamsProp>({
       } as Error;
     }
   } catch (_error) {
+    if (_error instanceof z.ZodError) {
+      return {
+        message: _error.issues?.[0].message ?? 'Zod Schema Validation failed.',
+        code: 400,
+      };
+    }
     const error = _error as Error;
     const err: Error = {
       message: error?.message ?? error?.toString(),
