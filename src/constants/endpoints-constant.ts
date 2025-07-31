@@ -14,7 +14,7 @@ export const Endpoints = Object.freeze({
   GET: {
     [`${GEMS.User}/get` as const]: {
       in: GetUserSchemaParams,
-      out: GetUserSchemaParams,
+      out: SetUserSchemaBody,
     },
     [`${GEMS.User}/ping` as const]: {
       in: undefined,

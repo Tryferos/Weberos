@@ -7,7 +7,7 @@ const getUser = async ({id}: GetUserSchemaType) => {
     params: {id},
   });
   if (Network.isNotError(response)) {
-    return response.id;
+    return response.name;
   } else {
     return response.message;
   }
