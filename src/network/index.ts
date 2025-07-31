@@ -1,4 +1,4 @@
-import {API_URL, Endpoints} from '@constants/endpoints';
+import {API_URL, Endpoints} from '@constants/endpoints-constant';
 import {EndpointType} from '@type/endpoint';
 import {Success, Error, Params} from '@type/global';
 import z from 'zod';
@@ -7,63 +7,99 @@ type GET_API_PATHS = keyof typeof Endpoints.GET;
 type POST_API_PATHS = keyof typeof Endpoints.POST;
 
 type ParamsProp = Params;
+type InputRequest = 'in';
+type OutputRequest = 'out';
+/**
+ * Response
+ */
+type GetResponse<P extends GET_API_PATHS> =
+  (typeof Endpoints.GET)[P][OutputRequest] extends undefined
+    ? Success
+    : z.infer<(typeof Endpoints.GET)[P][OutputRequest]>;
 
-type GetProps = {
-  [P in GET_API_PATHS]: {
-    path: P;
-  } & ((typeof Endpoints.GET)[P] extends undefined
+type PostResponse<P extends POST_API_PATHS> =
+  (typeof Endpoints.POST)[P][OutputRequest] extends undefined
+    ? Success
+    : z.infer<(typeof Endpoints.POST)[P][OutputRequest]>;
+
+/**
+ * Props
+ */
+type CommonProps = {
+  validateInput?: boolean;
+  validateOutput?: boolean;
+};
+
+type GetProps<P extends GET_API_PATHS> = CommonProps & {
+  path: P;
+} & ((typeof Endpoints.GET)[P][InputRequest] extends undefined
     ? {params?: ParamsProp}
     : {
-        params: z.infer<(typeof Endpoints.GET)[P]>;
+        params: z.infer<(typeof Endpoints.GET)[P][InputRequest]>;
       });
-}[GET_API_PATHS];
 
-type PostProps = {
-  [P in POST_API_PATHS]: {
-    path: P;
-    params?: Params;
-  } & ((typeof Endpoints.POST)[P] extends undefined
+type PostProps<P extends POST_API_PATHS> = CommonProps & {
+  path: P;
+  params?: Params;
+} & ((typeof Endpoints.POST)[P][InputRequest] extends undefined
     ? {body?: BodyType}
-    : {body: z.infer<(typeof Endpoints.POST)[P]>});
-}[POST_API_PATHS];
+    : {body: z.infer<(typeof Endpoints.POST)[P][InputRequest]>});
 
-type PostFormProps = {
-  path: POST_API_PATHS;
-  body?: FormData | null;
-} & Omit<GetProps, 'path'>;
+type PostFormProps<P extends POST_API_PATHS> = PostProps<P> & {
+  params?: ParamsProp;
+};
 
 type BodyType = Record<string, unknown>;
 type KeyType = {[key: string]: string | number | boolean | null | undefined};
 
-const _retrieveSchema = (
-  path: GET_API_PATHS | POST_API_PATHS,
-  requestType: keyof typeof Endpoints,
-): z.ZodSchema<ParamsProp | BodyType> | undefined => {
+const _retrieveSchema = ({
+  requestType,
+  type,
+}: {
+  type: InputRequest | OutputRequest;
+  requestType: keyof typeof Endpoints;
+}): z.ZodSchema<ParamsProp | BodyType> | undefined => {
   const keys = Object.keys(Endpoints[requestType]);
   for (const key of keys) {
     const endpoint = Endpoints[requestType] as EndpointType<
       ParamsProp | BodyType
-    >[typeof requestType];
+    >['GET'];
     if (endpoint) {
-      return endpoint[key];
+      return endpoint[key]?.[type];
     }
   }
 };
 
-const get = async <T = Success>({
+const get = async <Path extends GET_API_PATHS>({
   path,
   params,
-}: GetProps): Promise<T | Error> => {
+  validateInput,
+  validateOutput,
+}: GetProps<Path>): Promise<GetResponse<Path> | Error> => {
   try {
-    const schema = _retrieveSchema(path, 'GET') as z.ZodSchema<typeof params>;
-    const parsedParams = schema?.parse(params) ?? params;
-    const url = createUrl(path, parsedParams);
+    let sendParams = params;
+    if (validateInput) {
+      const schema = _retrieveSchema({
+        requestType: 'GET',
+        type: 'in',
+      }) as z.ZodSchema<typeof params>;
+      sendParams = schema?.parse(params) ?? params;
+    }
+    const url = createUrl(path, sendParams as ParamsProp);
     const response = await fetch(url, {
       method: 'GET',
       headers: await getHeaders(),
     });
     if (response.status >= 200 && response.status < 300) {
-      return handleResponse<T>(response);
+      let output = handleResponse<GetResponse<Path> | Error>(response);
+      if (validateOutput) {
+        const schema = _retrieveSchema({
+          requestType: 'GET',
+          type: 'out',
+        }) as z.ZodSchema<typeof output>;
+        output = schema?.parse(output) ?? output;
+      }
+      return output;
     } else {
       return {
         message: response.statusText,
@@ -86,22 +122,38 @@ const get = async <T = Success>({
   }
 };
 
-const post = async <T = Success>({
+const post = async <Path extends POST_API_PATHS>({
   body,
   path,
   params,
-}: PostProps): Promise<T | Error> => {
+  validateInput,
+  validateOutput,
+}: PostProps<Path>): Promise<PostResponse<Path> | Error> => {
   try {
-    const schema = _retrieveSchema(path, 'POST') as z.ZodSchema<typeof body>;
-    const parsedBody = schema?.parse(body) ?? body;
+    let sendBody = body;
+    if (validateInput) {
+      const schema = _retrieveSchema({
+        requestType: 'POST',
+        type: 'in',
+      }) as z.ZodSchema<typeof body>;
+      sendBody = schema?.parse(body) ?? body;
+    }
     const url = createUrl(path, params);
     const response = await fetch(url, {
       method: 'POST',
       headers: await getHeaders(),
-      body: parsedBody ? JSON.stringify(parsedBody) : undefined,
+      body: sendBody ? JSON.stringify(sendBody) : undefined,
     });
     if (response.status >= 200 && response.status < 300) {
-      return handleResponse<T>(response);
+      let output = handleResponse<PostResponse<Path>>(response);
+      if (validateOutput) {
+        const schema = _retrieveSchema({
+          requestType: 'POST',
+          type: 'out',
+        }) as z.ZodSchema<typeof output>;
+        output = schema?.parse(output) ?? output;
+      }
+      return output;
     } else {
       return {
         message: response.statusText,
@@ -115,39 +167,6 @@ const post = async <T = Success>({
         code: 400,
       };
     }
-    const error = _error as Error;
-    const err: Error = {
-      message: error?.message ?? error?.toString(),
-      code: error?.code ?? 500,
-    };
-    return err;
-  }
-};
-
-const postFormData = async <T = Success>({
-  body,
-  path,
-  params,
-}: PostFormProps): Promise<T | Error> => {
-  try {
-    const url = createUrl(path, params);
-    const response = await fetch(url, {
-      method: 'POST',
-      //* Do not include Content-Type: multipart/form-data, because the browser handles it automatically and will not send the boundary
-      headers: {
-        // Authorization: (await getHeaders()).Authorization,
-      },
-      body: body ?? undefined,
-    });
-    if (response.status >= 200 && response.status < 300) {
-      return handleResponse<T>(response);
-    } else {
-      return {
-        message: (await response.text()) || response.statusText,
-        code: response.status,
-      };
-    }
-  } catch (_error) {
     const error = _error as Error;
     const err: Error = {
       message: error?.message ?? error?.toString(),
@@ -196,7 +215,7 @@ function createUrl<K extends KeyType = KeyType>(
   params?: K,
 ): string {
   return `${API_URL}${path}${(() => {
-    if (params) {
+    if (params != null && Object.keys(params).length > 0) {
       return `?${Object.keys(params)
         .map(key => `${key}=${params[key]}`)
         .join('&')}`;
@@ -209,7 +228,6 @@ function createUrl<K extends KeyType = KeyType>(
 const Network = {
   get,
   post,
-  postFormData,
   isNotError,
 };
 

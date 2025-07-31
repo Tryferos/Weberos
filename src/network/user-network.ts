@@ -2,11 +2,15 @@ import Network from './index';
 import {GetUserSchemaType, SetUserSchemaType} from '@schemas/user-schema';
 
 const getUser = async ({id}: GetUserSchemaType) => {
-  const response = await Network.get<{atha: string}>({
+  const response = await Network.get({
     path: '/user/get',
     params: {id},
   });
-  return response;
+  if (Network.isNotError(response)) {
+    return response.id;
+  } else {
+    return response.message;
+  }
 };
 const pingUser = async () => {
   const response = await Network.get({
@@ -26,9 +30,6 @@ const setUser = async ({
     path: '/user/set',
     body: {id, name, email, password, imageUrl},
   });
-  if (Network.isNotError(response)) {
-    return response;
-  }
   return response;
 };
 
