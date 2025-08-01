@@ -1,6 +1,6 @@
 import {API_URL, Endpoints} from '@constants/endpoints-constant';
 import {EndpointType} from '@type/endpoint';
-import {Success, Error, Params} from '@type/global';
+import {Success, Params} from '@type/global';
 import z from 'zod';
 
 type GET_API_PATHS = keyof typeof Endpoints.GET;
@@ -45,10 +45,6 @@ type PostProps<P extends POST_API_PATHS> = CommonProps & {
     ? {body?: BodyType}
     : {body: z.infer<(typeof Endpoints.POST)[P][InputRequest]>});
 
-type PostFormProps<P extends POST_API_PATHS> = PostProps<P> & {
-  params?: ParamsProp;
-};
-
 type BodyType = Record<string, unknown>;
 type KeyType = {[key: string]: string | number | boolean | null | undefined};
 
@@ -75,7 +71,7 @@ const get = async <Path extends GET_API_PATHS>({
   params,
   validateInput,
   validateOutput,
-}: GetProps<Path>): Promise<GetResponse<Path> | Error> => {
+}: GetProps<Path>): Promise<GetResponse<Path>> => {
   try {
     let sendParams = params;
     if (validateInput) {
@@ -91,7 +87,7 @@ const get = async <Path extends GET_API_PATHS>({
       headers: await getHeaders(),
     });
     if (response.status >= 200 && response.status < 300) {
-      let output = handleResponse<GetResponse<Path> | Error>(response);
+      let output = handleResponse<GetResponse<Path>>(response);
       if (validateOutput) {
         const schema = _retrieveSchema({
           requestType: 'GET',
@@ -101,24 +97,16 @@ const get = async <Path extends GET_API_PATHS>({
       }
       return output;
     } else {
-      return {
-        message: response.statusText,
-        code: response.status,
-      } as Error;
+      throw new Error(response.statusText);
     }
   } catch (_error) {
     if (_error instanceof z.ZodError) {
-      return {
-        message: _error.issues?.[0].message ?? 'Zod Schema Validation failed.',
-        code: 400,
-      };
+      throw new Error(
+        _error.issues?.[0].message ?? 'Zod Schema Validation failed.',
+      );
     }
     const error = _error as Error;
-    const err: Error = {
-      message: error?.message ?? error?.toString(),
-      code: error?.code ?? 500,
-    };
-    return err;
+    throw new Error(error?.message ?? error?.toString());
   }
 };
 
@@ -128,7 +116,7 @@ const post = async <Path extends POST_API_PATHS>({
   params,
   validateInput,
   validateOutput,
-}: PostProps<Path>): Promise<PostResponse<Path> | Error> => {
+}: PostProps<Path>): Promise<PostResponse<Path>> => {
   try {
     let sendBody = body;
     if (validateInput) {
@@ -155,52 +143,31 @@ const post = async <Path extends POST_API_PATHS>({
       }
       return output;
     } else {
-      return {
-        message: response.statusText,
-        code: response.status,
-      } as Error;
+      throw new Error(response.statusText);
     }
   } catch (_error) {
     if (_error instanceof z.ZodError) {
-      return {
-        message: _error.issues?.[0].message ?? 'Zod Schema Validation failed.',
-        code: 400,
-      };
+      throw new Error(
+        _error.issues?.[0].message ?? 'Zod Schema Validation failed.',
+      );
     }
     const error = _error as Error;
-    const err: Error = {
-      message: error?.message ?? error?.toString(),
-      code: error?.code ?? 500,
-    };
-    return err;
+    throw new Error(error?.message ?? error?.toString());
   }
 };
 
-const handleResponse = <T>(response: Response): T | Error => {
+const handleResponse = <T>(response: Response): T => {
   if (!response) {
-    return {
-      message: 'Something went wrong',
-      code: 500,
-    };
+    throw new Error('Something went wrong');
   } else {
     try {
       const data = response.json();
-      return data as T | Error;
+      return data as T;
     } catch (err) {
       console.log(err);
-      return {
-        message: response.statusText,
-        code: response.status,
-      };
+      throw new Error(response.statusText);
     }
   }
-};
-
-const isNotError = <T>(data: T | Error): data is T => {
-  return (
-    (data as Error)?.message === undefined &&
-    (data as Error)?.code === undefined
-  );
 };
 
 const getHeaders = async () => {
@@ -228,7 +195,6 @@ function createUrl<K extends KeyType = KeyType>(
 const Network = {
   get,
   post,
-  isNotError,
 };
 
 export default Network;

@@ -1,16 +1,12 @@
 import Network from './index';
 import {GetUserSchemaType, SetUserSchemaType} from '@schemas/user-schema';
 
-const getUser = async ({id}: GetUserSchemaType) => {
+const getUser = async ({id}: GetUserSchemaType): Promise<SetUserSchemaType> => {
   const response = await Network.get({
     path: '/user/get',
     params: {id},
   });
-  if (Network.isNotError(response)) {
-    return response.name;
-  } else {
-    return response.message;
-  }
+  return response;
 };
 const pingUser = async () => {
   const response = await Network.get({
