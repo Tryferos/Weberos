@@ -1,3 +1,8 @@
-export const Environment = Object.freeze({
-  API_URL: process.env.API_URL || process.env.NEXT_PUBLIC_API_URL,
-});
+import {EnvSchema, EnvSchemaType} from '@schemas/env-schema';
+import {z} from 'zod';
+export const Environment: EnvSchemaType = z.parse(
+  EnvSchema,
+  Object.freeze({
+    API_URL: process.env.NEXT_PUBLIC_API_URL,
+  }),
+);
