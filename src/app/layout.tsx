@@ -1,6 +1,6 @@
 import type {Metadata} from 'next';
 import './globals.css';
-import FontFamilies from '@constants/fonts';
+import FontFamilies from '@constants/fonts-constant';
 
 export const metadata: Metadata = {
   title: 'Weberos',
