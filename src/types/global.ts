@@ -1,8 +1,3 @@
-type Error = {
-  message: string;
-  code: number;
-};
-
 type Success = {
   success: boolean;
 };
@@ -10,4 +5,4 @@ type Success = {
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type Params = {};
 
-export type {Error, Success, Params};
+export type {Success, Params};
