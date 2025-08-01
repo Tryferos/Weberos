@@ -1,4 +1,4 @@
-import {WeberosIcon} from '@components/atoms/WeberosIcon';
+import {WeberosIcon} from '@atoms/WeberosIcon';
 
 export const HomePageScreen = () => {
   return (

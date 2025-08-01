@@ -37,6 +37,6 @@ export type SVGIconProps = {
 const Icons: {
   [key in IconNames]: LazyExoticComponent<(_: SVGIconProps) => ReactNode>;
 } = {
-  cancel: lazy(() => import('../../icons/svg/cancel')),
-  'cancel-circle': lazy(() => import('../../icons/svg/cancel-circle')),
+  cancel: lazy(() => import('@icons/svg/cancel')),
+  'cancel-circle': lazy(() => import('@icons/svg/cancel-circle')),
 };
