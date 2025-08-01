@@ -25,8 +25,9 @@ export function useWeberosQuery<P extends EndpointKeys>({
 }: {
   key: P;
   fetcher: NetworkResponseType<P>;
-} & SWRConfiguration<DataType<P>>) {
-  return useSWR<DataType<P>>(key, fetcher, {
+} & Omit<SWRConfiguration<DataType<P>>, 'data'>) {
+  const props = useSWR<DataType<P>>(key, fetcher, {
     ...rest,
   });
+  return {...props, data: props.data as NonNullable<DataType<P>>};
 }
