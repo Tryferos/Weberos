@@ -1,8 +1,4 @@
-'use client';
-
 import {WeberosIcon} from '@components/atoms/WeberosIcon';
-import {useWeberosQuery} from '@hooks/useWeberosQuery';
-import Network from '@network/index';
 
 export const HomePageScreen = () => {
   return (
@@ -11,7 +7,7 @@ export const HomePageScreen = () => {
       <p className="text-center text-xl font-heading text-gray-light">
         Next.js Template
       </p>
-      <WeberosIcon name="cancel" className="text-white" onClick={() => {}} />
+      <WeberosIcon name="cancel-circle" className="text-white" />
     </div>
   );
 };

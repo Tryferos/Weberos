@@ -1,9 +1,10 @@
 import {lazy, LazyExoticComponent, ReactNode, useMemo} from 'react';
 import {twMerge} from 'tailwind-merge';
-type IconNames = 'cancel';
+type IconNames = 'cancel' | 'cancel-circle';
 type WeberosIconProps = {
   name: IconNames;
   className?: string;
+  // ** onClick needs a client component to use it.
   onClick?: () => void;
   containerClassName?: string;
 };
@@ -37,4 +38,5 @@ const Icons: {
   [key in IconNames]: LazyExoticComponent<(_: SVGIconProps) => ReactNode>;
 } = {
   cancel: lazy(() => import('../../icons/svg/cancel')),
+  'cancel-circle': lazy(() => import('../../icons/svg/cancel-circle')),
 };
