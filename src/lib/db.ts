@@ -4,7 +4,6 @@ import {MongoClient, MongoClientOptions, ServerApiVersion} from 'mongodb';
 const uri = process.env.MONGODB_URI;
 
 let client: MongoClient | undefined;
-console.log('hello world');
 if (uri) {
   const options: MongoClientOptions = {
     serverApi: {
@@ -29,5 +28,4 @@ if (uri) {
     client = new MongoClient(uri, options);
   }
 }
-console.log('client', client);
 export default client;
