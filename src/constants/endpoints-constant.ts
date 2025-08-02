@@ -2,10 +2,8 @@ import {
   SocketMessageSchema,
   SocketResponseSchema,
 } from '@schemas/socket-schema';
-import {Environment} from './env-constant';
 
 import {GetUserSchemaParams, SetUserSchemaBody} from '@schemas/user-schema';
-export const API_URL = Environment.API_URL;
 
 /**
  * Mock API
