@@ -68,9 +68,9 @@ const get = async <Path extends GET_API_PATHS>({
     if (response.status >= 200 && response.status < 300) {
       let output = handleResponse<GetResponse<Path>>(response);
       if (validateOutput) {
-        const schema = Endpoints.GET[path].out as unknown as z.ZodSchema<
-          typeof output
-        >;
+        const schema = Endpoints.GET[path].out as unknown as
+          | z.ZodSchema<typeof output>
+          | undefined;
         output = schema?.parse(output) ?? output;
       }
       return output;
@@ -110,9 +110,9 @@ const post = async <Path extends POST_API_PATHS>({
     if (response.status >= 200 && response.status < 300) {
       let output = handleResponse<PostResponse<Path>>(response);
       if (validateOutput) {
-        const schema = Endpoints.POST[path].out as unknown as z.ZodSchema<
-          typeof output
-        >;
+        const schema = Endpoints.POST[path].out as unknown as
+          | z.ZodSchema<typeof output>
+          | undefined;
         output = schema?.parse(output) ?? output;
       }
       return output;
