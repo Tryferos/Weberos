@@ -32,5 +32,9 @@ export const Endpoints = Object.freeze({
       in: SocketMessageSchema,
       out: SocketResponseSchema,
     },
+    ['/empty-socket' as const]: {
+      in: undefined,
+      out: undefined,
+    },
   },
 } as const);

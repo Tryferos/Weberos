@@ -36,39 +36,40 @@ export const useWeberosSocket = <S extends SocketEndpoint>({
   const socketRef = useRef<WebSocket>(null);
   const validateSchemaResponseRef = useRef(validateSchemaResponse);
   const validateSchemaMessageRef = useRef(validateSchemaMessage);
-  const {data, error} = useSWRSubscription<
-    ResponseType<S>,
-    string,
-    SocketEndpoint
-  >(key, (_key, {next}) => {
-    validateSchemaResponseRef.current = validateSchemaResponse;
-    validateSchemaMessageRef.current = validateSchemaMessage;
-    socketRef.current = new WebSocket(`${Environment.SOCKET_URL}${key}`);
-    socketRef.current.addEventListener('message', event => {
-      const json = event.data;
-      let parsedJson: ResponseType<S> | undefined = undefined;
-      try {
-        parsedJson = JSON.parse(json);
-        if (validateSchemaResponseRef.current) {
-          //* Zod Schema Validation
-          const schema = Endpoints.SOCKET[key].out as unknown as
-            | z.ZodSchema<typeof parsedJson>
-            | undefined;
-          parsedJson = schema?.parse(parsedJson) ?? parsedJson;
+  const {data, error} = useSWRSubscription<ResponseType<S>, string, string>(
+    key,
+    (_key, {next}) => {
+      validateSchemaResponseRef.current = validateSchemaResponse;
+      validateSchemaMessageRef.current = validateSchemaMessage;
+      socketRef.current = new WebSocket(`${Environment.SOCKET_URL}${_key}`);
+      socketRef.current.addEventListener('message', event => {
+        const json = event.data;
+        let parsedJson: ResponseType<S> | undefined = undefined;
+        try {
+          parsedJson = JSON.parse(json);
+          if (validateSchemaResponseRef.current) {
+            //* Zod Schema Validation
+            const schema = Endpoints.SOCKET[key].out as unknown as
+              | z.ZodSchema<typeof parsedJson>
+              | undefined;
+            parsedJson = schema?.parse(parsedJson) ?? parsedJson;
+          }
+          next(null, parsedJson);
+        } catch (err) {
+          if (err instanceof z.ZodError) {
+            next(err.issues?.[0].message ?? 'Zod Schema Validation failed.');
+          } else {
+            const error = err as Error;
+            next(error.message);
+          }
         }
-        next(null, parsedJson);
-      } catch (err) {
-        if (err instanceof z.ZodError) {
-          next(err.issues?.[0].message ?? 'Zod Schema Validation failed.');
-        } else {
-          const error = err as Error;
-          next(error.message);
-        }
-      }
-    });
-    socketRef.current.addEventListener('error', () => next('WebSocket error'));
-    return () => socketRef.current?.close();
-  });
+      });
+      socketRef.current.addEventListener('error', () =>
+        next('WebSocket error'),
+      );
+      return () => socketRef.current?.close();
+    },
+  );
   const sendMessage: SendMessageType<S> = (props => {
     try {
       if (socketRef.current) {
