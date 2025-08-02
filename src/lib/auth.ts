@@ -1,7 +1,10 @@
+import {MongoDBAdapter} from '@auth/mongodb-adapter';
 import NextAuth from 'next-auth';
+import dbClient from './db';
 import AuthProviders from './auth-providers';
 
 export const AuthHandler = NextAuth({
+  adapter: dbClient ? MongoDBAdapter(dbClient) : undefined,
   providers: AuthProviders,
   session: {strategy: 'jwt'},
   secret: process.env.NEXTAUTH_SECRET,
