@@ -48,24 +48,6 @@ type PostProps<P extends POST_API_PATHS> = CommonProps & {
 type BodyType = Record<string, unknown>;
 type KeyType = {[key: string]: string | number | boolean | null | undefined};
 
-const _retrieveSchema = ({
-  requestType,
-  type,
-}: {
-  type: InputRequest | OutputRequest;
-  requestType: keyof typeof Endpoints;
-}): z.ZodSchema<ParamsProp | BodyType> | undefined => {
-  const keys = Object.keys(Endpoints[requestType]);
-  for (const key of keys) {
-    const endpoint = Endpoints[requestType] as EndpointType<
-      ParamsProp | BodyType
-    >['GET'];
-    if (endpoint) {
-      return endpoint[key]?.[type];
-    }
-  }
-};
-
 const get = async <Path extends GET_API_PATHS>({
   path,
   params,
@@ -75,10 +57,7 @@ const get = async <Path extends GET_API_PATHS>({
   try {
     let sendParams = params;
     if (validateInput) {
-      const schema = _retrieveSchema({
-        requestType: 'GET',
-        type: 'in',
-      }) as z.ZodSchema<typeof params>;
+      const schema = Endpoints.GET[path].in;
       sendParams = schema?.parse(params) ?? params;
     }
     const url = createUrl(path, sendParams as ParamsProp);
@@ -89,10 +68,9 @@ const get = async <Path extends GET_API_PATHS>({
     if (response.status >= 200 && response.status < 300) {
       let output = handleResponse<GetResponse<Path>>(response);
       if (validateOutput) {
-        const schema = _retrieveSchema({
-          requestType: 'GET',
-          type: 'out',
-        }) as z.ZodSchema<typeof output>;
+        const schema = Endpoints.GET[path].out as unknown as z.ZodSchema<
+          typeof output
+        >;
         output = schema?.parse(output) ?? output;
       }
       return output;
@@ -120,10 +98,7 @@ const post = async <Path extends POST_API_PATHS>({
   try {
     let sendBody = body;
     if (validateInput) {
-      const schema = _retrieveSchema({
-        requestType: 'POST',
-        type: 'in',
-      }) as z.ZodSchema<typeof body>;
+      const schema = Endpoints.POST[path].in;
       sendBody = schema?.parse(body) ?? body;
     }
     const url = createUrl(path, params);
@@ -135,10 +110,9 @@ const post = async <Path extends POST_API_PATHS>({
     if (response.status >= 200 && response.status < 300) {
       let output = handleResponse<PostResponse<Path>>(response);
       if (validateOutput) {
-        const schema = _retrieveSchema({
-          requestType: 'POST',
-          type: 'out',
-        }) as z.ZodSchema<typeof output>;
+        const schema = Endpoints.POST[path].out as unknown as z.ZodSchema<
+          typeof output
+        >;
         output = schema?.parse(output) ?? output;
       }
       return output;
