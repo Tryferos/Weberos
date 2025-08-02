@@ -9,12 +9,13 @@ type SocketEndpoint = keyof typeof Endpoints.SOCKET;
 type ResponseType<S extends SocketEndpoint> = z.infer<
   NonNullable<(typeof Endpoints.SOCKET)[S]['out']>
 >;
+type ErrorResponse = {error: string};
 type SendMessageType<S extends SocketEndpoint> =
   (typeof Endpoints.SOCKET)[S]['in'] extends undefined
-    ? () => {message: string} | undefined
+    ? () => ErrorResponse | undefined
     : (
         args: z.infer<(typeof Endpoints.SOCKET)[S]['in']>,
-      ) => {message: string} | undefined;
+      ) => ErrorResponse | undefined;
 
 type Props<S extends SocketEndpoint> = {
   key: S;
@@ -86,10 +87,10 @@ export const useWeberosSocket = <S extends SocketEndpoint>({
     } catch (err) {
       if (err instanceof z.ZodError) {
         return {
-          message: err.issues?.[0].message ?? 'Zod Schema Validation failed.',
-        };
+          error: err.issues?.[0].message ?? 'Zod Schema Validation failed.',
+        } as ErrorResponse;
       }
-      return {message: (err as Error).message};
+      return {error: (err as Error).message} as ErrorResponse;
     }
   }) as SendMessageType<S>;
   return {data, error, sendMessage};
