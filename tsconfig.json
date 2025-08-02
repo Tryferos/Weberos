@@ -25,7 +25,7 @@
       "@type/*": ["./src/types/*"],
       "@network/*": ["./src/network/*"],
       "@store/*": ["./src/store/*"],
-      "@utils/*": ["./src/utils/*"],
+      "@lib/*": ["./src/lib/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@public/*": ["./public/*"],
       "@schemas/*": ["./src/schemas/*"],
