@@ -7,11 +7,12 @@ import {z} from 'zod';
 
 type SocketEndpoint = keyof typeof Endpoints.SOCKET;
 type ResponseType<S extends SocketEndpoint> = z.infer<
-  (typeof Endpoints.SOCKET)[S]['out']
+  NonNullable<(typeof Endpoints.SOCKET)[S]['out']>
 >;
-type MessageType<S extends SocketEndpoint> = z.infer<
-  (typeof Endpoints.SOCKET)[S]['in']
->;
+type SendMessageType<S extends SocketEndpoint> =
+  (typeof Endpoints.SOCKET)[S]['in'] extends undefined
+    ? () => boolean
+    : (args: z.infer<(typeof Endpoints.SOCKET)[S]['in']>) => boolean;
 
 type Props<S extends SocketEndpoint> = {
   key: S;
@@ -44,12 +45,12 @@ export const useWeberosSocket = <S extends SocketEndpoint>({key}: Props<S>) => {
     socketRef.current.addEventListener('error', () => next('WebSocket error'));
     return () => socketRef.current?.close();
   });
-  const sendMessage = (message: MessageType<S>): boolean => {
+  const sendMessage: SendMessageType<S> = (props => {
     if (socketRef.current) {
-      socketRef.current.send(JSON.stringify(message));
+      socketRef.current.send(JSON.stringify(props));
       return true;
     }
     return false;
-  };
+  }) as SendMessageType<S>;
   return {data, error, sendMessage};
 };
