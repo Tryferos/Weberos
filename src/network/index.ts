@@ -1,5 +1,5 @@
-import {Endpoints} from '@constants/endpoints-constant';
-import {Environment} from '@constants/env-constant';
+import {Endpoints} from '@constants/endpoints';
+import {Environment} from '@constants/env';
 import {Success, Params} from '@type/global';
 import z from 'zod';
 

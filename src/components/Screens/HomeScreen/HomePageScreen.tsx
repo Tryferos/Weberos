@@ -1,5 +1,7 @@
 'use client';
 import {WeberosIcon} from '@components/atoms/WeberosIcon';
+import {useWeberosQuery} from '@hooks/useWeberosQuery';
+import Network from '@network/index';
 import {useSession, signIn, signOut} from 'next-auth/react';
 
 export const HomePageScreen = () => {

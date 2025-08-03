@@ -1,9 +1,6 @@
-import {
-  SocketMessageSchema,
-  SocketResponseSchema,
-} from '@schemas/socket-schema';
+import {SocketMessageSchema, SocketResponseSchema} from '@schemas/socket';
 
-import {GetUserSchemaParams, UserSchema} from '@schemas/user-schema';
+import {GetUserSchemaParams, UserSchema} from '@schemas/user';
 
 /**
  * Mock API

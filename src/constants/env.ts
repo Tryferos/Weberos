@@ -1,4 +1,4 @@
-import {EnvSchema, EnvSchemaType} from '@schemas/env-schema';
+import {EnvSchema, EnvSchemaType} from '@schemas/env';
 import {z} from 'zod';
 export const Environment: EnvSchemaType = z.parse(
   EnvSchema,

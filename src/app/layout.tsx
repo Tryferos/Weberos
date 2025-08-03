@@ -1,6 +1,6 @@
 import type {Metadata} from 'next';
 import './globals.css';
-import FontFamilies from '@constants/fonts-constant';
+import FontFamilies from '@constants/fonts';
 import AuthProvider from '@components/wrappers/AuthProvider';
 
 export const metadata: Metadata = {

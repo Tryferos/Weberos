@@ -1,4 +1,4 @@
-import {Endpoints} from '@constants/endpoints-constant';
+import {Endpoints} from '@constants/endpoints';
 import {EndpointKeys} from '@type/endpoint';
 import {Success} from '@type/global';
 import useSWR, {SWRConfiguration} from 'swr';

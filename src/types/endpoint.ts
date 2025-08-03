@@ -1,6 +1,5 @@
-import {Endpoints} from '@constants/endpoints-constant';
+import {Endpoints} from '@constants/endpoints';
 import z from 'zod';
-import {Success} from './global';
 
 export type EndpointType<T = unknown> = {
   [key in 'GET' | 'POST']: {

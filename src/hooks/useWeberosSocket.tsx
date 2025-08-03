@@ -1,6 +1,6 @@
 'use client';
-import {Endpoints} from '@constants/endpoints-constant';
-import {Environment} from '@constants/env-constant';
+import {Endpoints} from '@constants/endpoints';
+import {Environment} from '@constants/env';
 import {useRef} from 'react';
 import useSWRSubscription from 'swr/subscription';
 import {z} from 'zod';
