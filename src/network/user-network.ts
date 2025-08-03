@@ -1,7 +1,7 @@
 import Network from './index';
-import {GetUserSchemaType, SetUserSchemaType} from '@schemas/user-schema';
+import {GetUserSchemaType, UserSchemaType} from '@schemas/user-schema';
 
-const getUser = async ({id}: GetUserSchemaType): Promise<SetUserSchemaType> => {
+const getUser = async ({id}: GetUserSchemaType): Promise<UserSchemaType> => {
   const response = await Network.get({
     path: '/user/get',
     params: {id},
@@ -21,7 +21,7 @@ const setUser = async ({
   email,
   password,
   imageUrl,
-}: SetUserSchemaType) => {
+}: UserSchemaType) => {
   const response = await Network.post({
     path: '/user/set',
     body: {id, name, email, password, imageUrl},

@@ -4,7 +4,7 @@ const GetUserSchemaParams = z.object({
   id: z.string().min(1),
 });
 
-const SetUserSchemaBody = z.object({
+const UserSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(4),
   email: z.email(),
@@ -13,6 +13,6 @@ const SetUserSchemaBody = z.object({
 });
 
 export type GetUserSchemaType = z.infer<typeof GetUserSchemaParams>;
-export type SetUserSchemaType = z.infer<typeof SetUserSchemaBody>;
+export type UserSchemaType = z.infer<typeof UserSchema>;
 
-export {GetUserSchemaParams, SetUserSchemaBody};
+export {GetUserSchemaParams, UserSchema};

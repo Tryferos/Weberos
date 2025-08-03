@@ -3,7 +3,7 @@ import {
   SocketResponseSchema,
 } from '@schemas/socket-schema';
 
-import {GetUserSchemaParams, SetUserSchemaBody} from '@schemas/user-schema';
+import {GetUserSchemaParams, UserSchema} from '@schemas/user-schema';
 
 /**
  * Mock API
@@ -12,7 +12,7 @@ export const Endpoints = Object.freeze({
   GET: {
     [`/user/get` as const]: {
       in: GetUserSchemaParams,
-      out: SetUserSchemaBody,
+      out: UserSchema,
     },
     [`/user/ping` as const]: {
       in: undefined,
@@ -21,8 +21,8 @@ export const Endpoints = Object.freeze({
   } as const,
   POST: {
     [`/user/set` as const]: {
-      in: SetUserSchemaBody,
-      out: SetUserSchemaBody,
+      in: UserSchema,
+      out: UserSchema,
     },
   } as const,
   SOCKET: {
