@@ -1,5 +1,5 @@
 import {Endpoints} from '@constants/endpoints';
-import {Environment} from '@constants/env';
+import {ClientEnvironment} from '@constants/env-client';
 import {Success, Params} from '@type/global';
 import z from 'zod';
 
@@ -155,7 +155,7 @@ function createUrl<K extends KeyType = KeyType>(
   path: GET_API_PATHS | POST_API_PATHS,
   params?: K,
 ): string {
-  return `${Environment.API_URL}${path}${(() => {
+  return `${ClientEnvironment.API_URL}${path}${(() => {
     if (params != null && Object.keys(params).length > 0) {
       return `?${Object.keys(params)
         .map(key => `${key}=${params[key]}`)

@@ -1,12 +1,16 @@
 import {Provider} from 'next-auth/providers/index';
 import GoogleProvider from 'next-auth/providers/google';
+import {ServerEnvironment} from '@constants/env-server';
 
 const AuthProviders: Provider[] = [];
-if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+if (
+  ServerEnvironment.GOOGLE_CLIENT_ID &&
+  ServerEnvironment.GOOGLE_CLIENT_SECRET
+) {
   AuthProviders.push(
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: ServerEnvironment.GOOGLE_CLIENT_ID,
+      clientSecret: ServerEnvironment.GOOGLE_CLIENT_SECRET,
     }),
   );
 }

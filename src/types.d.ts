@@ -6,5 +6,6 @@ namespace NodeJS {
     GOOGLE_CLIENT_SECRET: string;
     NEXTAUTH_SECRET: string;
     MONGODB_URI: string;
+    MONGODB_DB_NAME: string;
   }
 }

@@ -1,6 +1,6 @@
 'use client';
 import {Endpoints} from '@constants/endpoints';
-import {Environment} from '@constants/env';
+import {ClientEnvironment} from '@constants/env-client';
 import {useRef} from 'react';
 import useSWRSubscription from 'swr/subscription';
 import {z} from 'zod';
@@ -41,7 +41,9 @@ export const useWeberosSocket = <S extends SocketEndpoint>({
     (_key, {next}) => {
       validateSchemaResponseRef.current = validateSchemaResponse;
       validateSchemaMessageRef.current = validateSchemaMessage;
-      socketRef.current = new WebSocket(`${Environment.SOCKET_URL}${_key}`);
+      socketRef.current = new WebSocket(
+        `${ClientEnvironment.SOCKET_URL}${_key}`,
+      );
       socketRef.current.addEventListener('message', event => {
         const json = event.data;
         let parsedJson: ResponseType<S> | undefined = undefined;
