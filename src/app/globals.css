@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin 'tailwind-scrollbar';
 
 @theme {
   /*** Colors ***/
@@ -31,6 +32,12 @@
   --font-heading: var(--font-heading), sans-serif;
   --font-heading-sb: var(--font-heading-sb), sans-serif;
   --font-fantasy: var(--font-fantasy), sans-serif;
+}
+
+@layer components {
+  .custom-scrollbar {
+    @apply scrollbar scrollbar-thumb-main-bg/70 scrollbar-track-transparent;
+  }
 }
 
 .layout-gradient {
