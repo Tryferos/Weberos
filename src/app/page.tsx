@@ -3,5 +3,9 @@ import {getCurrentUser} from '../util/auth';
 
 export default async function Home() {
   const user = await getCurrentUser();
-  return <HomePageScreen />;
+  const hasEnvVariables =
+    !!process.env.NEXTAUTH_SECRET &&
+    !!process.env.GOOGLE_CLIENT_ID &&
+    !!process.env.GOOGLE_CLIENT_SECRET;
+  return <HomePageScreen hasEnvVariables={hasEnvVariables} />;
 }
