@@ -1,5 +1,5 @@
 import {twMerge} from 'tailwind-merge';
-import {WeberosIcon} from './WeberosIcon';
+import {WeberosIcon} from '../atoms/WeberosIcon';
 
 type Props = {
   name: Parameters<typeof WeberosIcon>[0]['name'];
