@@ -36,7 +36,7 @@
 
 @layer components {
   .custom-scrollbar {
-    @apply scrollbar scrollbar-thumb-main-bg/70 scrollbar-track-transparent;
+    @apply scrollbar scrollbar-thumb-main-bg/70 scrollbar-track-transparent overscroll-none;
   }
 }
 
