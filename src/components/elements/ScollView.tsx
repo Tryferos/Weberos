@@ -3,15 +3,14 @@ import {twMerge} from 'tailwind-merge';
 
 type Props = {
   className?: string;
-} & PropsWithChildren;
+} & PropsWithChildren &
+  React.ComponentPropsWithRef<'div'>;
 
-export default function ScrollView({className, children}: Props) {
+export default function ScrollView({className, children, ref}: Props) {
   return (
     <div
-      className={twMerge(
-        'overflow-y-auto h-full pt-6 custom-scrollbar',
-        className,
-      )}>
+      ref={ref}
+      className={twMerge('overflow-y-auto h-full custom-scrollbar', className)}>
       {children}
     </div>
   );
