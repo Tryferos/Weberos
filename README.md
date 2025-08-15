@@ -14,6 +14,7 @@ This is a Next.js template to provide a headstart when starting a new project, w
 - `WeberosIcon`: Typed and Cachable Svg Icons.
 - `UseWeberosQuery`: React Client Component hook for persisted network requests.
 - `UseWeberosSocket`: React Client Component hook for persisted Websocket connections.
+- `Popups`: Custom Popup Wrapper & handling with global state management.
 
 ## Environment Variables
 
