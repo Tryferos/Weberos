@@ -26,6 +26,8 @@ export const HomePageScreen = ({hasEnvVariables}: Props) => {
             Please set the environment variables.
           </p>
         )}
+        <Spacer className="h-2" />
+        <SearchBarComponent />
       </div>
       <GridMask />
     </>

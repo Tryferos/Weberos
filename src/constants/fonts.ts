@@ -4,7 +4,7 @@ import localFont from 'next/font/local';
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-body',
-  weight: '400',
+  weight: ['400', '500', '700'],
   preload: true,
 });
 
