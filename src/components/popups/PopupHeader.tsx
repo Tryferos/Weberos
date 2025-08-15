@@ -6,7 +6,7 @@ import {twMerge} from 'tailwind-merge';
 export const PopupHeader = ({description, icon, title}: PopupState) => {
   const setPopup = usePopupStore(s => s.setPopup);
   return (
-    <header className="flex justify-between gap-x-4 bg-gray-200/20 shadow-b-sm items-center w-full px-4 pt-4 pb-2">
+    <header className="flex justify-between gap-x-4 rounded-t-xl bg-gray-200/20 shadow-b-sm items-center w-full px-4 pt-4 pb-2">
       <div className="flex gap-x-2 items-center">
         {icon && (
           <WeberosIconBox

@@ -68,7 +68,7 @@ const PopupContainer = ({children}: PropsWithChildren) => {
       }}
       id={Elements.PopupContainerId}
       className={twMerge(
-        'absolute flex flex-col shadow-xl rounded left-[50%] translate-x-[-50%] bg-white',
+        'absolute flex flex-col shadow-xl rounded-t-xl rounded-b left-[50%] translate-x-[-50%] bg-white',
         'w-[calc(40vw+250px)] min-h-[calc(30vh+150px)] min-w-[400px] top-[10%]',
       )}>
       {children}
