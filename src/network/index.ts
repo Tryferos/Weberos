@@ -66,7 +66,7 @@ const get = async <Path extends GET_API_PATHS>({
       headers: await getHeaders(),
     });
     if (response.status >= 200 && response.status < 300) {
-      let output = handleResponse<GetResponse<Path>>(response);
+      let output = await handleResponse<GetResponse<Path>>(response);
       if (validateOutput) {
         const schema = Endpoints.GET[path].out as unknown as
           | z.ZodSchema<typeof output>
@@ -79,6 +79,7 @@ const get = async <Path extends GET_API_PATHS>({
     }
   } catch (_error) {
     if (_error instanceof z.ZodError) {
+      console.log(_error);
       throw new Error(
         _error.issues?.[0].message ?? 'Zod Schema Validation failed.',
       );
@@ -108,7 +109,7 @@ const post = async <Path extends POST_API_PATHS>({
       body: sendBody ? JSON.stringify(sendBody) : undefined,
     });
     if (response.status >= 200 && response.status < 300) {
-      let output = handleResponse<PostResponse<Path>>(response);
+      let output = await handleResponse<PostResponse<Path>>(response);
       if (validateOutput) {
         const schema = Endpoints.POST[path].out as unknown as
           | z.ZodSchema<typeof output>
@@ -130,12 +131,12 @@ const post = async <Path extends POST_API_PATHS>({
   }
 };
 
-const handleResponse = <T>(response: Response): T => {
+const handleResponse = async <T>(response: Response): Promise<T> => {
   if (!response) {
     throw new Error('Something went wrong');
   } else {
     try {
-      const data = response.json();
+      const data = await response.json();
       return data as T;
     } catch (err) {
       console.log(err);
