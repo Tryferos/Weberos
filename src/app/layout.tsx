@@ -3,7 +3,7 @@ import './globals.css';
 import FontFamilies from '@constants/fonts';
 import AuthProvider from '@components/wrappers/AuthProvider';
 import Elements from '@constants/elements';
-import {WeberosPopupListener} from '@components/popups/PopupListener';
+import {WeberosPopupListener} from '@components/popups/WeberosPopupListener';
 import WeberosPopupElement from '@components/popups/WeberosPopupElement';
 
 export const metadata: Metadata = {
