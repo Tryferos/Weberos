@@ -26,8 +26,10 @@ export const WeberosIcon = ({
         <Icon className={className} />
       </div>
     );
-  } else {
+  } else if (Icon) {
     return <Icon className={className} />;
+  } else {
+    return null;
   }
 };
 
