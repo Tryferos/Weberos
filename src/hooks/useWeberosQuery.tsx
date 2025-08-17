@@ -4,7 +4,7 @@ import {Success} from '@type/global';
 import useSWR, {SWRConfiguration} from 'swr';
 import {z} from 'zod';
 
-type NetworkResponseType<P extends EndpointKeys> = () => Promise<
+export type WeberosQueryFetcherResponse<P extends EndpointKeys> = Promise<
   P extends keyof typeof Endpoints.GET
     ? (typeof Endpoints.GET)[P]['out'] extends undefined
       ? Success
@@ -15,8 +15,12 @@ type NetworkResponseType<P extends EndpointKeys> = () => Promise<
       : z.infer<(typeof Endpoints.POST)[P]['out']>
     : never
 >;
-type DataType<P extends EndpointKeys> = Awaited<
-  ReturnType<NetworkResponseType<P>>
+
+export type WeberosQueryFetcherResponseFn<P extends EndpointKeys> =
+  () => WeberosQueryFetcherResponse<P>;
+
+export type WeberosQueryData<P extends EndpointKeys> = Awaited<
+  ReturnType<WeberosQueryFetcherResponseFn<P>>
 >;
 export function useWeberosQuery<P extends EndpointKeys>({
   key,
@@ -24,10 +28,13 @@ export function useWeberosQuery<P extends EndpointKeys>({
   ...rest
 }: {
   key: P;
-  fetcher: NetworkResponseType<P>;
-} & Omit<SWRConfiguration<DataType<P>>, 'data'>) {
-  const props = useSWR<DataType<P>>(key, fetcher, {
+  fetcher: WeberosQueryFetcherResponseFn<P>;
+} & Omit<SWRConfiguration<WeberosQueryData<P>>, 'data'>) {
+  const props = useSWR<WeberosQueryData<P>>(key, fetcher, {
     ...rest,
   });
-  return {...props, data: props.data as NonNullable<DataType<P>> | undefined};
+  return {
+    ...props,
+    data: props.data as NonNullable<WeberosQueryData<P>> | undefined,
+  };
 }
