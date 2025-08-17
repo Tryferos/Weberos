@@ -1,6 +1,10 @@
+import {MockSchemaType} from '@schemas/mock';
 import {NextRequest, NextResponse} from 'next/server';
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(
+  req: NextRequest,
+  res: NextResponse,
+): Promise<NextResponse<MockSchemaType>> {
   return NextResponse.json([
     {
       id: 1,

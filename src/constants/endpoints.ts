@@ -1,7 +1,7 @@
 import {MockSchema} from '@schemas/mock';
 import {SocketMessageSchema, SocketResponseSchema} from '@schemas/socket';
 
-import {GetUserSchemaParams, UserSchema} from '@schemas/user';
+import {UserSchema} from '@schemas/user';
 
 /**
  * Mock API
@@ -9,7 +9,7 @@ import {GetUserSchemaParams, UserSchema} from '@schemas/user';
 export const Endpoints = Object.freeze({
   GET: {
     [`/protected/user` as const]: {
-      in: GetUserSchemaParams,
+      in: undefined,
       out: UserSchema,
     },
     ['/mock' as const]: {

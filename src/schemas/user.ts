@@ -8,7 +8,6 @@ const UserSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(4),
   email: z.email(),
-  password: z.string().min(4),
   imageUrl: z.url(),
 });
 
