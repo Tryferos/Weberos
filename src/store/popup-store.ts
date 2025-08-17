@@ -8,6 +8,7 @@ export type PopupState = {
   title: string | null;
   description: string | null;
   icon: WeberosIconNames | null;
+  className?: string | null;
 };
 
 type Actions = {
@@ -19,15 +20,23 @@ const usePopupStore = create<PopupState & Actions>()(set => ({
   title: null,
   icon: null,
   description: null,
+  className: null,
   setPopup: state => {
     if (state == null || state.popup == null) {
-      set({icon: null, title: null, popup: null, description: null});
+      set({
+        icon: null,
+        title: null,
+        popup: null,
+        description: null,
+        className: null,
+      });
     } else {
       set({
         ...state,
         title: state.title ?? PopupContent[state.popup].title,
         icon: state.icon ?? PopupContent[state.popup].icon,
         description: state.description ?? PopupContent[state.popup].description,
+        className: state.className,
       });
     }
   },

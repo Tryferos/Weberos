@@ -34,7 +34,7 @@ function PopupElement() {
     return (
       <AnimatePresence>
         {popup && (
-          <PopupContainer>
+          <PopupContainer className={rest.className}>
             <>
               <PopupHeader popup={popup} {...rest} />
               <ScrollView
@@ -56,7 +56,10 @@ function PopupElement() {
 const WeberosPopupElement = memo(PopupElement);
 export default WeberosPopupElement;
 
-const PopupContainer = ({children}: PropsWithChildren) => {
+const PopupContainer = ({
+  children,
+  className,
+}: PropsWithChildren & Pick<PopupState, 'className'>) => {
   return (
     <motion.section
       initial={{opacity: 0}}
@@ -68,8 +71,9 @@ const PopupContainer = ({children}: PropsWithChildren) => {
       }}
       id={Elements.PopupContainerId}
       className={twMerge(
-        'absolute flex flex-col shadow-xl rounded-t-xl rounded-b left-[50%] translate-x-[-50%] bg-white',
+        'absolute flex flex-col shadow-xl rounded-t-xl rounded-b z-[99999999999] left-[50%] translate-x-[-50%] bg-white',
         'w-[calc(40vw+250px)] min-h-[calc(30vh+150px)] min-w-[400px] top-[10%]',
+        className,
       )}>
       {children}
     </motion.section>
