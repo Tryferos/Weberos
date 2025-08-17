@@ -7,7 +7,6 @@ import {WeberosPopupListener} from '@components/popups/WeberosPopupListener';
 import WeberosPopupElement from '@components/popups/WeberosPopupElement';
 
 export const metadata: Metadata = {
-  title: 'Weberos',
   description: 'Pulled from https://github.com/Tryferos/Weberos',
 };
 
@@ -20,6 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${FontFamilies.Wotfard} ${FontFamilies.Inter} ${FontFamilies.Cubano} w-[100dvw] relative h-[100dvh] font-body antialiased`}>
+        <title>Weberos</title>
         <AuthProvider>
           <div
             id={Elements.PageLayoutWrapperId}
