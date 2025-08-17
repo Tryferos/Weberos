@@ -28,6 +28,7 @@ type PostResponse<P extends POST_API_PATHS> =
 type CommonProps = {
   validateInput?: boolean;
   validateOutput?: boolean;
+  signal?: AbortSignal;
 };
 
 type GetProps<P extends GET_API_PATHS> = CommonProps & {
@@ -53,6 +54,7 @@ const get = async <Path extends GET_API_PATHS>({
   params,
   validateInput,
   validateOutput,
+  signal,
 }: GetProps<Path>): Promise<GetResponse<Path>> => {
   try {
     let sendParams = params;
@@ -64,6 +66,7 @@ const get = async <Path extends GET_API_PATHS>({
     const response = await fetch(url, {
       method: 'GET',
       headers: await getHeaders(),
+      signal,
     });
     if (response.status >= 200 && response.status < 300) {
       let output = await handleResponse<GetResponse<Path>>(response);
@@ -79,7 +82,6 @@ const get = async <Path extends GET_API_PATHS>({
     }
   } catch (_error) {
     if (_error instanceof z.ZodError) {
-      console.log(_error);
       throw new Error(
         _error.issues?.[0].message ?? 'Zod Schema Validation failed.',
       );
@@ -95,6 +97,7 @@ const post = async <Path extends POST_API_PATHS>({
   params,
   validateInput,
   validateOutput,
+  signal,
 }: PostProps<Path>): Promise<PostResponse<Path>> => {
   try {
     let sendBody = body;
@@ -107,6 +110,7 @@ const post = async <Path extends POST_API_PATHS>({
       method: 'POST',
       headers: await getHeaders(),
       body: sendBody ? JSON.stringify(sendBody) : undefined,
+      signal,
     });
     if (response.status >= 200 && response.status < 300) {
       let output = await handleResponse<PostResponse<Path>>(response);
@@ -137,7 +141,7 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
   } else {
     try {
       const data = await response.json();
-      return data as T;
+      return data as Promise<T>;
     } catch (err) {
       console.log(err);
       throw new Error(response.statusText);
@@ -148,7 +152,6 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
 const getHeaders = async () => {
   return {
     'Content-Type': 'application/json',
-    // Authorization: `Bearer ${await useUserStore.getState().getUserToken()}`,
   };
 };
 
