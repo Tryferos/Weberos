@@ -2,27 +2,32 @@ import {EndpointKeys} from '@type/endpoint';
 import {useWeberosQuery, WeberosQueryFetcherResponse} from './useWeberosQuery';
 import {useEffect, useRef} from 'react';
 
-type QueryType = {query: string};
+type QueryType<D> = {dependencies: D};
 
-type WeberosQueryFetcherResponseFn<P extends EndpointKeys> = (
+type WeberosQueryFetcherResponseFn<P extends EndpointKeys, D> = (
   args: {
     signal: AbortSignal;
-  } & QueryType,
+  } & QueryType<D>,
 ) => WeberosQueryFetcherResponse<P>;
 
-export function useWeberosAbortQuery<P extends EndpointKeys>(
+export function useWeberosAbortQuery<P extends EndpointKeys, D>(
   params: Omit<Parameters<typeof useWeberosQuery<P>>[0], 'fetcher'> & {
-    fetcher: WeberosQueryFetcherResponseFn<P>;
-  } & QueryType,
+    fetcher: WeberosQueryFetcherResponseFn<P, D>;
+  } & QueryType<D>,
 ) {
   const abortController = useRef<AbortController>(null);
+  const initialFetch = useRef(true);
   const {mutate, isLoading, ...props} = useWeberosQuery({
     ...params,
     fetcher: () => {
       abortController.current = new AbortController();
+      if (initialFetch.current) {
+        initialFetch.current = false;
+        return undefined as never;
+      }
       return params.fetcher({
         signal: abortController.current.signal,
-        query: params.query,
+        dependencies: params.dependencies,
       });
     },
   });
@@ -37,7 +42,7 @@ export function useWeberosAbortQuery<P extends EndpointKeys>(
         abortController.current.abort();
       }
     };
-  }, [params.query]);
+  }, [params.dependencies]);
 
   return {
     ...props,
