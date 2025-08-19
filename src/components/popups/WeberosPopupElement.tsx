@@ -14,17 +14,18 @@ import {
 } from 'react';
 import ScrollView from '@components/elements/ScollView';
 import {twMerge} from 'tailwind-merge';
+import Spacer from '@components/atoms/Spacer';
 
 const PopupContentMap: {
   [key in PopupType]: React.LazyExoticComponent<
-    (args: PopupState) => ReactNode
+    (args: PopupState<key>) => ReactNode
   >;
 } = {
   browse: lazy(() => import('@components/popups/app-popups/BrowsePopup')),
 };
 
 function PopupElement() {
-  const {popup, ...rest} = usePopupStore();
+  const {popup, data, description, icon, title, className} = usePopupStore();
   const WeberosPopupContent = useMemo(() => {
     if (popup) {
       return PopupContentMap[popup];
@@ -34,16 +35,27 @@ function PopupElement() {
     return (
       <AnimatePresence>
         {popup && (
-          <PopupContainer className={rest.className}>
+          <PopupContainer className={className}>
             <>
-              <PopupHeader popup={popup} {...rest} />
+              <PopupHeader
+                icon={icon}
+                title={title}
+                description={description}
+              />
+              <Spacer className="h-4" />
               <ScrollView
                 className={twMerge(
                   'px-2 pb-2 w-full relative',
-                  'min-h-[calc(30vh+50px)] max-h-[calc(35vh+150px)]',
+                  'min-h-[calc(30vh+50px)] max-h-[calc(45vh+150px)]',
                 )}>
                 <Suspense fallback={<></>}>
-                  <WeberosPopupContent popup={popup} {...rest} />
+                  <WeberosPopupContent
+                    popup={popup}
+                    description={description}
+                    icon={icon}
+                    title={title}
+                    data={data as never}
+                  />
                 </Suspense>
               </ScrollView>
             </>

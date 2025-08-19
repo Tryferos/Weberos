@@ -5,7 +5,7 @@ import usePopupStore from '@store/popup-store';
 export const SearchBarComponent = () => {
   const setPopup = usePopupStore(s => s.setPopup);
   const handleClick = () => {
-    setPopup({popup: 'browse'});
+    setPopup('browse', {data: {startingString: '@yahoo.gr'}});
   };
   return (
     <div

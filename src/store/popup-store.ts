@@ -3,16 +3,35 @@ import PopupContent from '@constants/popups';
 import {create} from 'zustand';
 
 export type PopupType = 'browse';
-export type PopupState = {
+
+export interface PopupDataMap {
+  browse: {startingString: string};
+}
+
+export type PopupState<P extends PopupType | unknown = unknown> = {
   popup: PopupType | null;
   title: string | null;
   description: string | null;
   icon: WeberosIconNames | null;
+  data: P extends PopupType
+    ? P extends keyof PopupDataMap
+      ? PopupDataMap[P]
+      : undefined
+    : unknown | null;
   className?: string | null;
 };
 
-type Actions = {
-  setPopup: (state: Partial<PopupState> | null) => void;
+export type Actions = {
+  setPopup: <P extends PopupType | null>(
+    type: P,
+    payload?: P extends PopupType
+      ? Partial<
+          Omit<PopupState, 'popup' | 'data'> & {
+            data: P extends keyof PopupDataMap ? PopupDataMap[P] : undefined;
+          }
+        >
+      : undefined,
+  ) => void;
 };
 
 const usePopupStore = create<PopupState & Actions>()(set => ({
@@ -20,23 +39,26 @@ const usePopupStore = create<PopupState & Actions>()(set => ({
   title: null,
   icon: null,
   description: null,
-  className: null,
-  setPopup: state => {
-    if (state == null || state.popup == null) {
+  data: null,
+  setPopup: (type, payload) => {
+    if (type == null) {
       set({
         icon: null,
         title: null,
         popup: null,
         description: null,
         className: null,
+        data: null,
       });
     } else {
+      const content = PopupContent[type];
       set({
-        ...state,
-        title: state.title ?? PopupContent[state.popup].title,
-        icon: state.icon ?? PopupContent[state.popup].icon,
-        description: state.description ?? PopupContent[state.popup].description,
-        className: state.className,
+        popup: type,
+        className: payload?.className,
+        title: payload?.title ?? content.title,
+        icon: payload?.icon ?? content.icon,
+        description: payload?.description ?? content.description,
+        data: payload?.data ?? null,
       });
     }
   },

@@ -3,7 +3,11 @@ import WeberosIconBox from '@components/elements/WeberosIconBox';
 import usePopupStore, {PopupState} from '@store/popup-store';
 import {twMerge} from 'tailwind-merge';
 
-export const PopupHeader = ({description, icon, title}: PopupState) => {
+export const PopupHeader = ({
+  description,
+  icon,
+  title,
+}: Pick<PopupState, 'description' | 'icon' | 'title'>) => {
   const setPopup = usePopupStore(s => s.setPopup);
   return (
     <header className="flex justify-between gap-x-4 rounded-t-xl bg-gray-200/20 shadow-b-sm items-center w-full px-4 pt-4 pb-2">
