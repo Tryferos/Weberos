@@ -54,7 +54,7 @@ const usePopupStore = create<PopupState & Actions>()(set => ({
       const content = PopupContent[type];
       set({
         popup: type,
-        className: payload?.className,
+        className: payload?.className ?? content.className,
         title: payload?.title ?? content.title,
         icon: payload?.icon ?? content.icon,
         description: payload?.description ?? content.description,

@@ -1,12 +1,8 @@
-import {WeberosIconNames} from '@components/atoms/WeberosIcon';
-import {PopupType} from '@store/popup-store';
+import {PopupState, PopupType} from '@store/popup-store';
 
 const PopupContent: {
-  [key in PopupType]: {
-    title: string;
-    description: string;
-    icon: WeberosIconNames;
-  };
+  [key in PopupType]: Pick<PopupState, 'description' | 'icon' | 'title'> &
+    Partial<Pick<PopupState, 'className'>>;
 } = {
   browse: {
     title: 'Browse for mock users',
