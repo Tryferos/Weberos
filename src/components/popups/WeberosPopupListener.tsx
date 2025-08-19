@@ -1,11 +1,13 @@
 'use client';
 import Elements from '@constants/elements';
 import usePopupStore from '@store/popup-store';
+import {usePathname} from 'next/navigation';
 import {useEffect, useRef} from 'react';
 
 export const WeberosPopupListener = () => {
   const popup = usePopupStore(s => s.popup);
   const setPopup = usePopupStore(s => s.setPopup);
+  const pathName = usePathname();
   const clickHandlerRef = useRef<(ev: PointerEvent) => void>(null);
   useEffect(() => {
     const layoutElement = document.getElementById(Elements.PageLayoutWrapperId);
@@ -45,5 +47,9 @@ export const WeberosPopupListener = () => {
       layoutElement.classList.remove('popup-mask');
     }
   }, [popup]);
+
+  useEffect(() => {
+    setPopup(null);
+  }, [pathName]);
   return null;
 };
