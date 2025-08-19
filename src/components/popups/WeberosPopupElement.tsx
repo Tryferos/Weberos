@@ -46,7 +46,7 @@ function PopupElement() {
               <ScrollView
                 className={twMerge(
                   'px-2 pb-2 w-full relative',
-                  'min-h-[calc(30vh+50px)] max-h-[calc(45vh+150px)]',
+                  'min-h-[calc(30vh+50px)] max-h-[calc(45vh+150px)] overflow-x-hidden',
                 )}>
                 <Suspense fallback={<></>}>
                   <WeberosPopupContent
@@ -84,7 +84,8 @@ const PopupContainer = ({
       id={Elements.PopupContainerId}
       className={twMerge(
         'absolute flex flex-col shadow-xl rounded-t-xl rounded-b z-[99999999999] left-[50%] translate-x-[-50%] bg-white',
-        'w-[calc(40vw+250px)] min-h-[calc(30vh+150px)] min-w-[400px] top-[10%]',
+        'w-[calc(40vw+250px)] max-h-[calc(70vh+125px)] min-h-[calc(40vh+150px)] min-w-[350px] top-[10%]',
+        'max-md:min-h-[100vh] max-md:top-0 max-md:rounded-none max-md:w-[90vw] max-sm:w-[100vw]',
         className,
       )}>
       {children}
