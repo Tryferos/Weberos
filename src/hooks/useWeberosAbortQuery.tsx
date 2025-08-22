@@ -17,10 +17,13 @@ export function useWeberosAbortQuery<P extends EndpointKeys, D>(
 ) {
   const abortController = useRef<AbortController>(null);
   const initialFetch = useRef(true);
-  const {mutate, isLoading, ...props} = useWeberosQuery({
+  const {mutate, isLoading, data, ...props} = useWeberosQuery({
     ...params,
     fetcher: () => {
       abortController.current = new AbortController();
+      if (data != null) {
+        initialFetch.current = false;
+      }
       if (initialFetch.current) {
         initialFetch.current = false;
         return undefined as never;
@@ -46,6 +49,7 @@ export function useWeberosAbortQuery<P extends EndpointKeys, D>(
 
   return {
     ...props,
+    data,
     mutate,
     isLoading,
   };
