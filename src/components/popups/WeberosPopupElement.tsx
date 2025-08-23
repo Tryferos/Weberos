@@ -18,7 +18,7 @@ import Spacer from '@components/atoms/Spacer';
 
 const PopupContentMap: {
   [key in PopupType]: React.LazyExoticComponent<
-    (args: PopupState<key>) => ReactNode
+    (args: PopupState<PopupState>) => ReactNode
   >;
 } = {
   browse: lazy(() => import('@components/popups/app-popups/BrowsePopup')),
@@ -54,7 +54,7 @@ function PopupElement() {
                     description={description}
                     icon={icon}
                     title={title}
-                    data={data as never}
+                    data={data as PopupState<typeof popup>['data']}
                   />
                 </Suspense>
               </ScrollView>
