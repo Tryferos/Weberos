@@ -1,4 +1,4 @@
-import {twMerge} from 'tailwind-merge';
+import cn from '../../util/cn';
 
 type Props = {
   className?: string;
@@ -34,7 +34,7 @@ const SingleSkeleton = ({className, round}: Props) => {
   return (
     <div
       aria-hidden="true"
-      className={twMerge(
+      className={cn(
         'h-2 w-full bg-gray-300 animate-pulse',
         round && 'rounded-full size-12',
         className,

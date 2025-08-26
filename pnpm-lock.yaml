@@ -11,6 +11,9 @@ importers:
       '@auth/mongodb-adapter':
         specifier: ^3.10.0
         version: 3.10.0(mongodb@6.18.0)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       mongodb:
         specifier: ^6.18.0
         version: 6.18.0

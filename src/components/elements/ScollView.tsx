@@ -1,5 +1,5 @@
 import {PropsWithChildren} from 'react';
-import {twMerge} from 'tailwind-merge';
+import cn from '../../util/cn';
 
 type Props = {
   className?: string;
@@ -10,7 +10,7 @@ export default function ScrollView({className, children, ref}: Props) {
   return (
     <div
       ref={ref}
-      className={twMerge('overflow-y-auto h-full custom-scrollbar', className)}>
+      className={cn('overflow-y-auto h-full custom-scrollbar', className)}>
       {children}
     </div>
   );

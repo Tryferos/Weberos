@@ -1,5 +1,5 @@
-import {twMerge} from 'tailwind-merge';
 import {WeberosIcon} from '../atoms/WeberosIcon';
+import cn from '../../util/cn';
 
 type Props = {
   name: Parameters<typeof WeberosIcon>[0]['name'];
@@ -16,11 +16,7 @@ export default function WeberosIconBox({
   return (
     <div
       onClick={onClick}
-      className={twMerge(
-        'p-2 rounded-md',
-        onClick && 'cursor-pointer',
-        className,
-      )}>
+      className={cn('p-2 rounded-md', onClick && 'cursor-pointer', className)}>
       <WeberosIcon name={name} className={iconClassName} />
     </div>
   );

@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {twMerge} from 'tailwind-merge';
+import cn from '../../util/cn';
 
 type Props = {
   text: string[];
@@ -31,7 +31,7 @@ export const ChangingText = ({
     };
   }, [text, speed, index, stopOnLimit]);
   return (
-    <p className={twMerge('', className)}>
+    <p className={cn('', className)}>
       {text?.[Math.max(0, Math.min(index % text.length, text.length - 1))] ??
         ''}
     </p>

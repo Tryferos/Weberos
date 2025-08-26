@@ -1,5 +1,5 @@
 import {SVGIconProps} from '@components/atoms/WeberosIcon';
-import {twMerge} from 'tailwind-merge';
+import cn from '../../util/cn';
 
 const Icon = ({className}: SVGIconProps) => {
   return (
@@ -9,7 +9,7 @@ const Icon = ({className}: SVGIconProps) => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className={twMerge('size-6', className)}>
+      className={cn('size-6', className)}>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"

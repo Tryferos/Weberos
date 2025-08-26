@@ -1,5 +1,5 @@
 import {lazy, LazyExoticComponent, ReactNode, useMemo} from 'react';
-import {twMerge} from 'tailwind-merge';
+import cn from '../../util/cn';
 export type WeberosIconNames = 'cancel' | 'cancel-circle' | 'google' | 'search';
 type WeberosIconProps = {
   name: WeberosIconNames;
@@ -19,7 +19,7 @@ export const WeberosIcon = ({
     return (
       <div
         onClick={onClick}
-        className={twMerge(
+        className={cn(
           'p-2 cursor-pointer group hover:bg-icon-hover rounded-full self-start flex-none',
           containerClassName,
         )}>

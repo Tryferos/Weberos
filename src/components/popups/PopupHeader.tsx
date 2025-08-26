@@ -1,7 +1,7 @@
 'use client';
 import WeberosIconBox from '@components/elements/WeberosIconBox';
 import usePopupStore, {PopupState} from '@store/popup-store';
-import {twMerge} from 'tailwind-merge';
+import cn from '../../util/cn';
 
 export const PopupHeader = ({
   description,
@@ -22,7 +22,7 @@ export const PopupHeader = ({
         <div className="flex flex-col w-[100%]">
           {title && (
             <p
-              className={twMerge(
+              className={cn(
                 'font-medium font-body max-sm:text-base',
                 !description && 'text-lg',
               )}>
