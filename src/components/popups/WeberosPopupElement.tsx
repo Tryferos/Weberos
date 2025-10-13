@@ -4,14 +4,7 @@ import Elements from '@constants/elements';
 import usePopupStore, {PopupState, PopupType} from '@store/popup-store';
 import {AnimatePresence, motion} from 'motion/react';
 import {PopupHeader} from './PopupHeader';
-import {
-  ComponentType,
-  memo,
-  PropsWithChildren,
-  ReactNode,
-  Suspense,
-  useMemo,
-} from 'react';
+import {ComponentType, memo, PropsWithChildren, Suspense, useMemo} from 'react';
 import ScrollView from '@components/elements/ScollView';
 import Spacer from '@components/atoms/Spacer';
 import cn from '../../util/cn';
@@ -47,15 +40,13 @@ function PopupElement() {
                   'px-2 pb-2 w-full relative',
                   'min-h-[calc(30vh+50px)] max-h-[calc(45vh+150px)] overflow-x-hidden',
                 )}>
-                <Suspense fallback={<></>}>
-                  <WeberosPopupContent
-                    popup={popup}
-                    description={description}
-                    icon={icon}
-                    title={title}
-                    data={data as PopupState<typeof popup>['data']}
-                  />
-                </Suspense>
+                <WeberosPopupContent
+                  popup={popup}
+                  description={description}
+                  icon={icon}
+                  title={title}
+                  data={data as PopupState<typeof popup>['data']}
+                />
               </ScrollView>
             </>
           </PopupContainer>
