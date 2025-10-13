@@ -5,7 +5,7 @@ import usePopupStore, {PopupState, PopupType} from '@store/popup-store';
 import {AnimatePresence, motion} from 'motion/react';
 import {PopupHeader} from './PopupHeader';
 import {
-  lazy,
+  ComponentType,
   memo,
   PropsWithChildren,
   ReactNode,
@@ -15,13 +15,12 @@ import {
 import ScrollView from '@components/elements/ScollView';
 import Spacer from '@components/atoms/Spacer';
 import cn from '../../util/cn';
+import dynamic from 'next/dynamic';
 
 const PopupContentMap: {
-  [key in PopupType]: React.LazyExoticComponent<
-    (args: PopupState<PopupState>) => ReactNode
-  >;
+  [key in PopupType]: ComponentType<PopupState<PopupState>>;
 } = {
-  browse: lazy(() => import('@components/popups/app-popups/BrowsePopup')),
+  browse: dynamic(() => import('@components/popups/app-popups/BrowsePopup')),
 };
 
 function PopupElement() {

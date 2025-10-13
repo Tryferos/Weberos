@@ -1,5 +1,6 @@
-import {lazy, LazyExoticComponent, ReactNode, useMemo} from 'react';
+import {ComponentType, ReactNode, useMemo} from 'react';
 import cn from '../../util/cn';
+import dynamic from 'next/dynamic';
 export type WeberosIconNames = 'cancel' | 'cancel-circle' | 'google' | 'search';
 type WeberosIconProps = {
   name: WeberosIconNames;
@@ -37,12 +38,10 @@ export type SVGIconProps = {
   className?: string;
 };
 const Icons: {
-  [key in WeberosIconNames]: LazyExoticComponent<
-    (_: SVGIconProps) => ReactNode
-  >;
+  [key in WeberosIconNames]: ComponentType<SVGIconProps>;
 } = {
-  cancel: lazy(() => import('@icons/svg/icon-cancel')),
-  'cancel-circle': lazy(() => import('@icons/svg/icon-cancel-circle')),
-  google: lazy(() => import('@icons/svg/icon-google')),
-  search: lazy(() => import('@icons/svg/icon-search')),
+  cancel: dynamic(() => import('@icons/svg/icon-cancel')),
+  'cancel-circle': dynamic(() => import('@icons/svg/icon-cancel-circle')),
+  google: dynamic(() => import('@icons/svg/icon-google')),
+  search: dynamic(() => import('@icons/svg/icon-search')),
 };
