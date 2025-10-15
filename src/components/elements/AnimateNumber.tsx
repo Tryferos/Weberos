@@ -26,8 +26,6 @@ export default function AnimateNumber({
   };
 
   useEffect(() => {
-    showingNumberRef.current = 0;
-    setShowingNumber(0);
     const tick = () => {
       if (showingNumberRef.current >= value) {
         return;
