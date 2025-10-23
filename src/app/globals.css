@@ -47,7 +47,7 @@
 
 @layer components {
   .custom-scrollbar {
-    @apply scrollbar scrollbar-thumb-main-bg/70 scrollbar-track-transparent overscroll-none;
+    @apply scrollbar scrollbar-thumb-main-bg/70 scrollbar-track-transparent;
   }
   .popup-mask {
     @apply blur-[2px] pointer-events-none overflow-hidden;
