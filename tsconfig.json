@@ -31,7 +31,8 @@
       "@schemas/*": ["./src/schemas/*"],
       "@app/*": ["./src/app/*"],
       "@models/*": ["./src/models/*"],
-      "@icons/*": ["./src/icons/*"]
+      "@icons/*": ["./src/icons/*"],
+      "@util/*": ["./src/util/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
