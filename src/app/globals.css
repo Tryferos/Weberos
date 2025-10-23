@@ -1,6 +1,15 @@
 @import 'tailwindcss';
 @plugin 'tailwind-scrollbar';
 
+@custom-variant hover-mb {
+  &:hover {
+    @slot;
+  }
+  &:active {
+    @slot;
+  }
+}
+
 @theme {
   /*** Colors ***/
   /*** Theme Colors ***/
