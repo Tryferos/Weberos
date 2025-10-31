@@ -6,6 +6,10 @@ import {SearchBarComponent} from './components/SearchBarComponent';
 import Spacer from '@components/atoms/Spacer';
 import Loader from '@components/atoms/Loader';
 import LoadingButton from '@components/elements/LoadingButton';
+import AnimateNumber from '@components/elements/AnimateNumber';
+import ScrollView from '@components/elements/ScollView';
+import NoiseMask from '@components/masks/NoiseMask';
+import ImageCarousel from './components/ImageCarousel';
 
 type Props = {
   hasEnvVariables: boolean;
@@ -16,6 +20,8 @@ export const HomePageScreen = ({hasEnvVariables}: Props) => {
   };
   return (
     <>
+      <NoiseMask />
+      <Spacer className="h-400" />
       <div className="absolute items-center left-[50%] translate-x-[-50%] gap-y-1 translate-y-[-50%] top-[40%] flex flex-col">
         <p className="text-center text-3xl font-fantasy text-white">Weberos</p>
         <p className="text-center text-xl font-heading text-gray-light">
@@ -37,6 +43,8 @@ export const HomePageScreen = ({hasEnvVariables}: Props) => {
         <LoadingButton onPress={onPress} className="">
           <h1 className="font-heading text-sm">i like to load, a lot.</h1>
         </LoadingButton>
+        <Spacer className="h-4" />
+        <ImageCarousel />
       </div>
       <GridMask />
     </>
