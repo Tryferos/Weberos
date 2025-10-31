@@ -22,7 +22,7 @@ export const Skeleton = ({
   } else {
     return (
       <div aria-hidden="true" className="flex flex-col gap-1">
-        {new Array(repeat).fill(1).map((_, i) => (
+        {Array.from({length: repeat}).map((_, i) => (
           <SingleSkeleton className={className} round={round} key={i} />
         ))}
       </div>
