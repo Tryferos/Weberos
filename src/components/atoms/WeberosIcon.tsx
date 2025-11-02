@@ -33,27 +33,21 @@ export const WeberosIcon = ({
         )}></figure>
     );
   }, [className]);
-  if (onClick) {
-    return (
-      <div
-        onClick={onClick}
-        className={cn(
-          'p-2 cursor-pointer group hover:bg-icon-hover rounded-full self-start flex-none',
-          containerClassName,
-        )}>
-        <Suspense fallback={SuspenseSkeleton}>
-          <Icon className={className} />
-        </Suspense>
-      </div>
-    );
-  } else if (Icon) {
+
+  if (animate && Icon) {
     return (
       <Suspense fallback={SuspenseSkeleton}>
-        <Icon className={className} />
+        <Icon className={className} {...props} />
       </Suspense>
     );
   } else {
-    return null;
+    return (
+      <svg
+        {...props}
+        className={cn('size-5 stroke-white fill-transparent', className)}>
+        <use href={`/sprite.svg#${name}`}></use>
+      </svg>
+    );
   }
 };
 
