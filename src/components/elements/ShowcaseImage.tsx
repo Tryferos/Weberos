@@ -54,7 +54,7 @@ export default function ShowcaseImage({
               ) : (
                 <WeberosIcon
                   name={showcaseImage as WeberosIconNames}
-                  className="w-full h-full p-10"
+                  className="w-full h-full p-10 stroke-4"
                 />
               ))}
             <WeberosIcon
