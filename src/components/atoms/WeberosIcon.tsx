@@ -1,6 +1,7 @@
-import {ComponentType, Suspense, useMemo} from 'react';
+import {ComponentType, Suspense, SVGProps, useMemo} from 'react';
 import cn from '../../util/cn';
 import dynamic from 'next/dynamic';
+
 export type WeberosIconNames =
   | 'cancel'
   | 'cancel-circle'
@@ -9,18 +10,17 @@ export type WeberosIconNames =
   | 'react'
   | 'golang'
   | 'javascript';
+
 type WeberosIconProps = {
   name: WeberosIconNames;
-  className?: string;
-  // ** onClick needs a client component to use it.
-  onClick?: () => void;
-  containerClassName?: string;
-};
+  animate?: boolean;
+} & SVGIconProps;
+
 export const WeberosIcon = ({
   name,
+  animate,
   className,
-  onClick,
-  containerClassName,
+  ...props
 }: WeberosIconProps) => {
   const Icon = useMemo(() => Icons[name], [name]);
   const SuspenseSkeleton = useMemo(() => {
@@ -59,7 +59,7 @@ export const WeberosIcon = ({
 
 export type SVGIconProps = {
   className?: string;
-};
+} & SVGProps<SVGSVGElement>;
 const Icons: {
   [key in WeberosIconNames]: ComponentType<SVGIconProps>;
 } = {

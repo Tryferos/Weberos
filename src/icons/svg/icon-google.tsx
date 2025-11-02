@@ -1,9 +1,10 @@
 import {SVGIconProps} from '@components/atoms/WeberosIcon';
 import cn from '../../util/cn';
 
-const Icon = ({className}: SVGIconProps) => {
+const Icon = ({className, ...props}: SVGIconProps) => {
   return (
     <svg
+      {...props}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 640 640"
