@@ -2,7 +2,7 @@ import {ComponentType, Suspense, SVGProps, useMemo} from 'react';
 import cn from '../../util/cn';
 import dynamic from 'next/dynamic';
 
-export type WeberosIconNames =
+type CommonIconNames =
   | 'cancel'
   | 'cancel-circle'
   | 'google'
@@ -10,19 +10,17 @@ export type WeberosIconNames =
   | 'react'
   | 'golang'
   | 'javascript';
+export type WeberosIconNamesAnimated = CommonIconNames;
+export type WeberosIconNames = CommonIconNames | 'flower';
 
-type WeberosIconProps = {
-  name: WeberosIconNames;
-  animate?: boolean;
-} & SVGIconProps;
+type WeberosIconProps = SVGIconProps &
+  (
+    | {animatable: true; name: WeberosIconNamesAnimated}
+    | {name: WeberosIconNames}
+  );
 
-export const WeberosIcon = ({
-  name,
-  animate,
-  className,
-  ...props
-}: WeberosIconProps) => {
-  const Icon = useMemo(() => Icons[name], [name]);
+export const WeberosIcon = ({name, className, ...props}: WeberosIconProps) => {
+  const Icon = useMemo(() => Icons[name as WeberosIconNamesAnimated], [name]);
   const SuspenseSkeleton = useMemo(() => {
     return (
       <figure
@@ -34,7 +32,7 @@ export const WeberosIcon = ({
     );
   }, [className]);
 
-  if (animate && Icon) {
+  if ('animatable' in props && props.animatable && Icon) {
     return (
       <Suspense fallback={SuspenseSkeleton}>
         <Icon className={className} {...props} />
@@ -55,7 +53,7 @@ export type SVGIconProps = {
   className?: string;
 } & SVGProps<SVGSVGElement>;
 const Icons: {
-  [key in WeberosIconNames]: ComponentType<SVGIconProps>;
+  [key in WeberosIconNamesAnimated]: ComponentType<SVGIconProps>;
 } = {
   cancel: dynamic(() => import('@icons/svg/icon-cancel')),
   'cancel-circle': dynamic(() => import('@icons/svg/icon-cancel-circle')),
