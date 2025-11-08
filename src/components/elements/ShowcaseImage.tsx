@@ -1,12 +1,12 @@
 'use client';
 import {Dispatch, SetStateAction, useEffect, Activity, useMemo} from 'react';
 import {createPortal} from 'react-dom';
-import Image from 'next/image';
 import {WeberosIcon, WeberosIconNames} from '@components/atoms/WeberosIcon';
 import Elements from '@constants/elements';
 import cn from '@util/cn';
 import {motion as m} from 'motion/react';
 import useHasMounted from '@hooks/useHasMounted';
+import ImageBlurHash from '@components/atoms/ImageBlurHash';
 type Props = {
   showcaseImage: string | WeberosIconNames | null;
   setShowcaseImage: Dispatch<SetStateAction<string | null>>;
@@ -45,7 +45,7 @@ export default function ShowcaseImage({
             )}>
             {showcaseImage &&
               (isRemoteImage ? (
-                <Image
+                <ImageBlurHash
                   src={showcaseImage}
                   fill
                   alt="showcasing image"
