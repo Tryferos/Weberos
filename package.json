@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "generate:images-blur-hash": "npx tsx scripts/generateBlurDataUrl.ts",
+    "build": "npm run generate:images-blur-hash && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -29,10 +30,13 @@
     "@types/node": "^20",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "blurhash": "^2.0.5",
     "eslint": "^9",
     "eslint-config-next": "15.4.4",
+    "sharp": "^0.34.5",
     "tailwind-scrollbar": "^4.0.2",
     "tailwindcss": "^4",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   },
   "packageManager": "pnpm@10.18.0+sha512.e804f889f1cecc40d572db084eec3e4881739f8dec69c0ff10d2d1beff9a4e309383ba27b5b750059d7f4c149535b6cd0d2cb1ed3aeb739239a4284a68f40cfa"
