@@ -4,10 +4,7 @@ import {SignedInComponent} from './components/SignInComponent';
 import {SignedOutComponent} from './components/SignOutComponent';
 import {SearchBarComponent} from './components/SearchBarComponent';
 import Spacer from '@components/atoms/Spacer';
-import Loader from '@components/atoms/Loader';
 import LoadingButton from '@components/elements/LoadingButton';
-import AnimateNumber from '@components/elements/AnimateNumber';
-import ScrollView from '@components/elements/ScollView';
 import NoiseMask from '@components/masks/NoiseMask';
 import ImageCarousel from './components/ImageCarousel';
 
