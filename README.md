@@ -15,6 +15,7 @@ This is a Next.js template to provide a headstart when starting a new project, w
 - `UseWeberosQuery`: React Client Component hook for persisted network requests.
 - `UseWeberosSocket`: React Client Component hook for persisted Websocket connections.
 - `Popups`: Custom Popup Wrapper & handling with global state management.
+- `ImageBlurHash`: Automatically include ImageBlurDataUrl for images to promote smoother transitions on slow networks.
 
 ## Environment Variables
 
